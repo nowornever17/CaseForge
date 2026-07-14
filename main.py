@@ -1,12 +1,13 @@
 """
-城市设计案例研究助手 v1.2 — 模块化重构版
+城市设计案例研究助手 v1.5 — PDF 支持版
 ==========================================
 用法:
-  python main.py              # 交互式菜单
-  python main.py --demo       # 西溪湿地演示
-  python main.py --api zhipu  # 切换 API
-  python main.py --list-apis  # 列出 API
-  python main.py --tfidf      # 强制本地 TF-IDF
+  python main.py                    # 交互式菜单
+  python main.py --demo             # 西溪湿地演示
+  python main.py --file paper.pdf   # 直接分析 PDF/TXT/MD 文件
+  python main.py --api zhipu        # 切换 API
+  python main.py --list-apis        # 列出 API
+  python main.py --tfidf            # 强制本地 TF-IDF
 
 首次使用: pip install -r requirements.txt
 """
@@ -24,6 +25,7 @@ from api_client import call_ai_api
 from search import search_semantic_scholar, fetch_url_content
 from formatter import format_result, save_results
 from cache import get_cached_or_none, save_cache, _fingerprint
+from pdf_reader import read_file as read_pdf_file
 
 CACHE_FILE = os.path.join(OUTPUT_DIR, ".extraction_cache.json")
 Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
@@ -164,6 +166,7 @@ def main():
     parser.add_argument("--tfidf",     action="store_true", help="强制 TF-IDF 本地方案")
     parser.add_argument("--api",       type=str, metavar="NAME", help="切换 API 供应商")
     parser.add_argument("--list-apis", action="store_true", help="列出所有 API")
+    parser.add_argument("--file",      type=str, metavar="PATH", help="直接分析文件 (PDF/TXT/MD)")
     args = parser.parse_args()
 
     if args.list_apis:
@@ -182,9 +185,27 @@ def main():
 
     bar = "═" * 50
     print(f"\n╔{bar}╗")
-    print(f"║  城市设计案例研究助手 v1.2{' ' * 23}║")
+    print(f"║  城市设计案例研究助手 v1.5{' ' * 23}║")
     print(f"║  当前 API：{API_REGISTRY[ACTIVE_API]['label']:<38}║")
     print(f"╚{bar}╝")
+
+    # --file: 直接分析文件
+    if args.file:
+        filepath = args.file
+        print(f"\n  📄  读取文件: {filepath}")
+        file_result = read_pdf_file(filepath)
+        if file_result.get("error"):
+            print(f"  ❌  {file_result['error']}")
+            return
+        text = file_result["text"]
+        print(f"  ✅  提取成功 ({file_result['method']}, {len(text)} 字符)")
+        title = os.path.splitext(os.path.basename(filepath))[0]
+        print(f"\n  ⏳  正在分析...\n")
+        result = extract_case_insights(text, title=title, force_tfidf=args.tfidf)
+        print(format_result(result, title))
+        if input("\n是否保存？(y/n): ").strip().lower() == "y":
+            save_results([{**result, "title": title}], OUTPUT_DIR, prefix="file")
+        return
 
     if args.demo:
         mode_demo()
