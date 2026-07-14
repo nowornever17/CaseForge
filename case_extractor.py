@@ -636,14 +636,50 @@ def mode_demo():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="城市设计案例研究助手")
-    parser.add_argument("--demo",  action="store_true", help="运行西溪湿地演示")
-    parser.add_argument("--tfidf", action="store_true", help="强制 TF-IDF，不调 API")
+    global ACTIVE_API
+
+    parser = argparse.ArgumentParser(
+        description="城市设计案例研究助手 — AI 学术案例精华提取",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+使用示例:
+  python case_extractor.py                  # 交互式菜单
+  python case_extractor.py --demo           # 西溪湿地 AI vs TF-IDF 对比
+  python case_extractor.py --tfidf          # 强制本地 TF-IDF，不调 API
+  python case_extractor.py --api zhipu      # 切换到智谱 GLM（免费）
+  python case_extractor.py --api qwen       # 切换到通义千问
+  python case_extractor.py --api moonshot   # 切换到 Moonshot (Kimi)
+  python case_extractor.py --list-apis      # 列出所有支持的 API
+        """
+    )
+    parser.add_argument("--demo",      action="store_true", help="运行西溪湿地演示")
+    parser.add_argument("--tfidf",     action="store_true", help="强制 TF-IDF，不调 API")
+    parser.add_argument("--api",       type=str,  metavar="NAME", help="切换 API 供应商 (deepseek/zhipu/qwen/moonshot/ernie)")
+    parser.add_argument("--list-apis", action="store_true", help="列出所有支持的 API")
     args = parser.parse_args()
+
+    # --list-apis
+    if args.list_apis:
+        print("\n📡 支持的 AI API 供应商：\n")
+        for k, v in API_REGISTRY.items():
+            marker = " ← 当前" if k == ACTIVE_API else ""
+            status = "已配置" if v["key"] else "未配置"
+            print(f"  {k:12s}  {v['label']:30s}  [{status}]{marker}")
+        print("\n切换: python case_extractor.py --api <名称>")
+        return
+
+    # 切换 API
+    if args.api:
+        if args.api not in API_REGISTRY:
+            print(f"❌ 未知 API: {args.api}")
+            print(f"   可用: {', '.join(API_REGISTRY.keys())}")
+            return
+        ACTIVE_API = args.api
+        print(f"✅ 已切换至: {API_REGISTRY[ACTIVE_API]['label']}")
 
     bar = "═" * 50
     print(f"\n╔{bar}╗")
-    print(f"║  城市设计案例研究助手 v1.0{' ' * 23}║")
+    print(f"║  城市设计案例研究助手 v1.1{' ' * 23}║")
     print(f"║  当前 API：{API_REGISTRY[ACTIVE_API]['label']:<38}║")
     print(f"╚{bar}╝")
 
@@ -655,11 +691,16 @@ def main():
     print("  1  手动粘贴文章 → 三维度精华提取（推荐）")
     print("  2  关键词搜索英文学术文献 → 批量摘要")
     print("  3  演示模式（西溪湿地案例）")
+    print("  4  查看 API 列表")
 
-    ch = input("\n请输入选项（1/2/3）：").strip()
+    ch = input("\n请输入选项（1/2/3/4）：").strip()
     if   ch == "1": mode_paste(force_tfidf=args.tfidf)
     elif ch == "2": mode_search(force_tfidf=args.tfidf)
     elif ch == "3": mode_demo()
+    elif ch == "4":
+        for k, v in API_REGISTRY.items():
+            marker = " ← 当前" if k == ACTIVE_API else ""
+            print(f"  {k:12s}  {v['label']:30s}{marker}")
     else:           print("无效选项")
 
 

@@ -2,30 +2,35 @@
 城市设计案例研究助手 — 配置文件
 =================================
 填写 API 密钥后，与 case_extractor.py 放同一目录即可运行。
-三家国内 API 选一家填入，其余留空。
+支持多家国内 AI API，选一家填入，其余留空。
 """
 
 # ──────────────────────────────────────────────────────────────
-# 三选一：填入对应密钥，其余留空
+# 多选一：填入对应密钥，其余留空
 # ──────────────────────────────────────────────────────────────
 
-# 【推荐 #1】智谱 GLM-4-Flash —— 完全免费
-#   申请：https://open.bigmodel.cn → 注册 → 控制台 → API 密钥 → 新建
-#   限额：每天 10 万 tokens，速率 5 次/秒（毕设调研完全够用）
+# DeepSeek — 几乎免费，100 篇文章约 ¥0.15
+# 申请：https://platform.deepseek.com → API Keys
+DEEPSEEK_API_KEY = ""
+
+# 智谱 GLM-4-Flash — 完全免费
+# 申请：https://open.bigmodel.cn → 控制台 → API 密钥
 ZHIPU_API_KEY = ""
 
-# 【推荐 #2】DeepSeek —— 几乎免费，100 篇文章约 ¥0.15
-#   申请：https://platform.deepseek.com → 注册 → API Keys → 创建密钥
-#   价格：deepseek-chat  输入 ¥0.27/M tokens，输出 ¥1.10/M tokens
-DEEPSEEK_API_KEY = "YOUR_DEEPSEEK_API_KEY"
-
-# 【推荐 #3】通义千问 —— 新用户赠 ¥300 免费额度
-#   申请：https://dashscope.aliyuncs.com → 阿里云账号登录 → 开通 → 获取 Key
-#   价格：qwen-turbo  输入 ¥0.30/M，输出 ¥0.60/M
+# 通义千问 — 新用户赠 ¥300
+# 申请：https://dashscope.aliyuncs.com
 QWEN_API_KEY = ""
 
+# Moonshot (Kimi) — 长文本能力强，适合论文
+# 申请：https://platform.moonshot.cn
+MOONSHOT_API_KEY = ""
+
+# 百度文心一言 (ERNIE) — 中文理解好
+# 申请：https://console.bce.baidu.com/ai
+ERNIE_API_KEY = ""
+
 # ──────────────────────────────────────────────────────────────
-# 改这一行来切换供应商：zhipu / deepseek / qwen
+# 改这一行来切换供应商
 # ──────────────────────────────────────────────────────────────
 ACTIVE_API = "deepseek"
 
@@ -33,17 +38,17 @@ ACTIVE_API = "deepseek"
 # 接口参数（通常不需要修改）
 # ──────────────────────────────────────────────────────────────
 API_REGISTRY = {
-    "zhipu": {
-        "key":      ZHIPU_API_KEY,
-        "base_url": "https://open.bigmodel.cn/api/paas/v4/",
-        "model":    "glm-4-flash",
-        "label":    "智谱 GLM-4-Flash【完全免费】",
-    },
     "deepseek": {
         "key":      DEEPSEEK_API_KEY,
         "base_url": "https://api.deepseek.com",
         "model":    "deepseek-chat",
         "label":    "DeepSeek V3",
+    },
+    "zhipu": {
+        "key":      ZHIPU_API_KEY,
+        "base_url": "https://open.bigmodel.cn/api/paas/v4/",
+        "model":    "glm-4-flash",
+        "label":    "智谱 GLM-4-Flash【免费】",
     },
     "qwen": {
         "key":      QWEN_API_KEY,
@@ -51,7 +56,19 @@ API_REGISTRY = {
         "model":    "qwen-turbo",
         "label":    "通义千问 Turbo",
     },
+    "moonshot": {
+        "key":      MOONSHOT_API_KEY,
+        "base_url": "https://api.moonshot.cn/v1",
+        "model":    "moonshot-v1-8k",
+        "label":    "Moonshot (Kimi)",
+    },
+    "ernie": {
+        "key":      ERNIE_API_KEY,
+        "base_url": "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro",
+        "model":    "ernie-speed-128k",
+        "label":    "百度文心 ERNIE",
+    },
 }
 
-# 输出目录（运行时自动创建）
+# 输出目录
 OUTPUT_DIR = "./research_output"
