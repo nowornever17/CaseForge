@@ -4,6 +4,10 @@
 
 *An extensible AI workflow for extracting structured case studies from academic literature.*
 
+## Who is this for?
+
+If you read **3+ papers a week** and want to turn them into **searchable, reusable knowledge assets** — CaseForge is built for you.
+
 ---
 
 ## Why CaseForge?
