@@ -1,113 +1,166 @@
-# CaseForge
+# ⚒️ CaseForge
 
-> Turn papers into structured knowledge. · v2.0
+> **Don't just read papers. Build knowledge from them.**
 
-[![Python](https://img.shields.io/badge/Python-3.9+-blue)](https://python.org)
-[![API](https://img.shields.io/badge/API-5%20providers-green)]()
-[![License](https://img.shields.io/badge/License-MIT-yellow)](./LICENSE)
-[![CI](https://img.shields.io/badge/CI-passing-brightgreen)]()
+*An extensible AI workflow for extracting structured case studies from academic literature.*
 
-## ✨ What is CaseForge?
+---
 
-CaseForge 将学术论文转换为结构化的知识报告。
+## Why CaseForge?
+
+Most AI tools **summarize** papers.
+
+CaseForge **transforms** papers into structured knowledge that can be searched, compared, and reused.
+
+Instead of asking:
+> "What is this paper about?"
+
+CaseForge asks:
+> "What knowledge can we extract from this paper?"
+
+---
+
+## Philosophy
+
+CaseForge is not another paper chatbot.
+
+It is a **workflow engine** for turning academic literature into structured knowledge.
+
+Small. Simple. Extensible. Reusable.
+
+---
+
+## What It Does
 
 ```
-  📄 论文 PDF / 粘贴文本
+  📄 Paper (PDF / TXT / MD)
         │
         ▼
-  CaseForge Pipeline
+  📖 Reader      ← pdfplumber / markitdown
         │
         ▼
-  📊 结构化知识报告（HTML / MD / JSON / Word）
+  🧠 AI Extract  ← 8-field deep extraction
+        │
+        ▼
+  📊 Export      ← HTML / Markdown / JSON / Word
 ```
 
-不是"AI 帮你读论文"，而是"AI 帮你把论文拆成一张信息表格"。
+---
 
-## 🔬 8 字段深度拆解
+## Demo
 
-| 字段 | 说明 |
-|------|------|
-| 🌍 研究背景 | 社会/学术背景，要解决什么问题 |
-| 🎯 研究对象/目的 | 研究对象是什么，研究目标 |
-| 🧪 研究方法 | 定量/定性？数据来源？分析框架？ |
-| 🔬 实验/实证 | 实验设计、数据收集、分析方法 |
-| 📈 核心发现/成果 | 最重要的研究结论 |
-| 💡 创新点 | 相比已有研究的创新之处 |
-| ⚖️ 优势与局限 | 长处 + 不足或适用范围 |
-| ✨ 一句话总结 | 核心贡献一句话 |
+See `examples/` for sample inputs and outputs.
 
-## 🚀 快速开始
+```bash
+python main.py --demo
+```
+
+---
+
+## Quick Start
 
 ```bash
 git clone https://github.com/nowornever17/CaseForge.git
 cd CaseForge
 pip install -r requirements.txt
-cp config.example.py config.py    # 填入任意一家 API Key
-python main.py --demo             # 西溪湿地案例演示
-python main.py --file paper.pdf   # 直接分析 PDF
-python main.py --api zhipu        # 切换到免费智谱 API
+cp config.example.py config.py     # add any one API key
+python main.py --demo
 ```
 
-## 🌐 3 大论文库 + 5 家 AI
+---
 
-| 搜索 | API | 特点 |
-|------|-----|------|
-| Semantic Scholar | — | 免费，英文为主 |
-| OpenAlex | — | 免费，2.5 亿篇，多语言 |
-| CORE | 免费 Key | 全球开放获取仓库 |
-| DeepSeek | ¥0.15/100篇 | 几乎免费 |
-| 智谱 GLM | **免费** | 每天 10 万 tokens |
-| 通义千问 | ¥300 试用金 | 阿里云 |
-| Moonshot | 按量付费 | 长文本强 |
-| 百度文心 | 免费额度 | 中文优化 |
+## Features
 
-## 🛠 CLI
+- ✅ 8-field structured case extraction
+- ✅ Export to HTML / Markdown / JSON / Word
+- ✅ Prompt-driven workflow (swap disciplines without changing code)
+- ✅ Multi-provider LLM support (5 APIs, including free tier)
+- ✅ Local TF-IDF fallback when API fails
+- ✅ Dedup cache (never pay twice for the same paper)
+- ✅ Academic search (Semantic Scholar / OpenAlex / CORE)
 
-```bash
-python main.py --help           # 帮助
-python main.py --demo           # 演示
-python main.py --file <路径>    # 分析文件
-python main.py --api <name>     # 切换 API
-python main.py --list-apis      # 列出 API
-python main.py --tfidf          # 强制本地方案
+---
+
+## Example Output
+
+```markdown
+## 案例标题
+
+🌍 研究背景
+城市湿地公园面临生态保护与开发的结构性张力...
+
+🎯 研究对象/目的
+分析杭州西溪湿地公园的开发争议与协调机制...
+
+🧪 研究方法
+案例研究法，数据来源包括政策文件、生态监测数据...
+
+📈 核心发现
+围栏式保护不可持续，需利益共享+多主体协商...
+
+💡 创新点
+将社区协调机制与规划管控相结合进行系统分析...
+
+✨ 一句话总结
+社区利益共享与协商机制需前置到规划阶段。
 ```
 
-## 📁 项目结构
+---
+
+## Architecture
 
 ```
-├── main.py              # CLI 入口
-├── api_client.py        # AI 调用 + Prompt 加载
-├── search.py            # Semantic Scholar / OpenAlex / CORE
-├── pdf_reader.py        # PDF / TXT / MD 解析
-├── exporters.py         # MD / JSON / Word / HTML 输出
-├── formatter.py         # 终端格式化
-├── cache.py             # 去重缓存
-├── case_extractor.py    # TF-IDF 降级 + 向后兼容
-├── prompts/             # Prompt 插件（多学科可扩展）
-└── tests/               # 测试
+prompts/           ← Discipline-specific extraction templates
+    │
+    ▼
+api_client.py      ← Unified interface for 5 LLM providers
+    │
+    ▼
+exporters.py       ← HTML / Markdown / JSON / Word output
+    │
+    ▼
+search.py          ← Semantic Scholar / OpenAlex / CORE
 ```
 
-## 🔌 插件化架构
+---
 
-新增学科不需要改代码，只需在 `prompts/` 下新建一个 `.md` 文件：
+## Extensible by Design
+
+Add a new discipline **without touching any code**:
 
 ```
 prompts/
-├── urban_design.md    ← 城市设计（默认）
-├── education.md       ← 教育学（示例）
-└── medicine.md        ← 任何人都可以加
+├── urban_design.md    ← default
+├── education.md       ← contributed
+├── medicine.md        ← coming soon
+└── law.md             ← coming soon
 ```
 
-详见 [CONTRIBUTING.md](./CONTRIBUTING.md)。
+---
 
-## ⚠️ 已知限制
+## Roadmap
 
-- PDF 仅支持文本型，纯扫描图片 PDF 需 OCR（未来版本）
-- 单篇文章截取前 3500 字分析（受 API 上下文窗口限制）
-- CNKI / 万方等需登录的学术数据库无法直接抓取
+- ✅ Markdown / JSON / Word / HTML export
+- ✅ Multi-provider LLM support
+- ✅ Prompt plugin system
+- ✅ Academic search (3 databases)
+- □ Prompt marketplace
+- □ MCP / Skills integration
+- □ Web UI
 
-## 🤝 贡献
+---
 
-欢迎提 Issue 和 PR — 特别是贡献新的学科 Prompt！
+## Contributing
 
-详见 [CONTRIBUTING.md](./CONTRIBUTING.md) · [CHANGELOG.md](./CHANGELOG.md)
+We welcome contributions — especially:
+
+- **Prompt templates** for new disciplines
+- **Readers** for new input formats
+- **Exporters** for new output formats
+- **Tests** and documentation
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+---
+
+[MIT License](./LICENSE) · [Changelog](./CHANGELOG.md)
