@@ -1,6 +1,6 @@
 # 城市设计案例研究助手
 
-> AI 驱动的学术案例文献精华提取工具 · v1.2
+> AI 驱动的学术案例文献精华提取工具 · v1.5
 
 [![Python](https://img.shields.io/badge/Python-3.9+-blue)](https://python.org)
 [![API](https://img.shields.io/badge/API-5%20providers-green)]()
@@ -22,6 +22,7 @@ pip install -r requirements.txt
 cp config.example.py config.py    # 填入任意一家 API Key
 python main.py                    # 交互式菜单
 python main.py --demo             # 演示模式
+python main.py --file paper.pdf   # 直接分析 PDF/TXT/MD 文件
 python main.py --api zhipu        # 切换免费智谱
 ```
 
@@ -30,6 +31,7 @@ python main.py --api zhipu        # 切换免费智谱
 ```
 ├── main.py              # 入口 + CLI
 ├── api_client.py        # AI API 调用（可切换 5 家供应商）
+├── pdf_reader.py        # PDF/TXT/MD 文件解析（pdfplumber + markitdown）
 ├── search.py            # Semantic Scholar + 网页抓取
 ├── cache.py             # 去重缓存
 ├── formatter.py         # 格式化 + 保存
@@ -45,6 +47,7 @@ python main.py --api zhipu        # 切换免费智谱
 
 ```bash
 python main.py --help           # 帮助
+python main.py --file <路径>     # 直接分析文件（PDF/TXT/MD）
 python main.py --list-apis      # 列出所有 API
 python main.py --api <name>     # 切换 API 供应商
 python main.py --tfidf          # 强制本地 TF-IDF
