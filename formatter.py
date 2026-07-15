@@ -13,8 +13,10 @@ def format_result(result: dict, title: str = "") -> str:
         ("🧪 研究方法", "methods"),
         ("🔬 实验/实证", "experiment"),
         ("📈 核心发现/成果", "findings"),
+        ("📊 图表解析", "figures"),
         ("💡 创新点", "innovation"),
         ("⚖️ 优势与局限", "pros_cons"),
+        ("🔁 可复刻性评估", "reproducibility"),
         ("✨ 一句话总结", "summary"),
     ]
     lines = [
@@ -49,8 +51,9 @@ def save_results(results: list, output_dir: str, prefix: str = "analysis"):
             for label, key in [
                 ("研究背景", "background"), ("研究对象/目的", "objective"),
                 ("研究方法", "methods"), ("实验/实证", "experiment"),
-                ("核心发现/成果", "findings"), ("创新点", "innovation"),
-                ("优势与局限", "pros_cons"), ("一句话总结", "summary"),
+                ("核心发现/成果", "findings"), ("图表解析", "figures"),
+                ("创新点", "innovation"), ("优势与局限", "pros_cons"),
+                ("可复刻性评估", "reproducibility"), ("一句话总结", "summary"),
             ]:
                 f.write(f"**{label}**\n\n{r.get(key,'未提取到')}\n\n")
             f.write("---\n\n")

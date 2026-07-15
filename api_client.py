@@ -63,13 +63,15 @@ def _parse_response(raw: str) -> dict:
     }
     markers = [
         ("【研究背景】",       "background"),
-        ("【背景与冲突】",       "background"),  # 向后兼容旧版 prompt
+        ("【背景与冲突】",       "background"),  # 向后兼容
         ("【研究对象/目的】",    "objective"),
         ("【研究方法】",         "methods"),
         ("【实验/实证】",        "experiment"),
         ("【核心发现/成果】",    "findings"),
+        ("【图表解析】",         "figures"),      # v2.1 新增
         ("【创新点】",           "innovation"),
         ("【优势与局限】",       "pros_cons"),
+        ("【可复刻性评估】",     "reproducibility"),  # v2.1 新增
         ("【一句话总结】",       "summary"),
         ("【关键决策或方案】",    "decisions"),   # 向后兼容
         ("【经验与教训】",       "lessons"),      # 向后兼容

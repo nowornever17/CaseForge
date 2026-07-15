@@ -1,5 +1,5 @@
 """
-城市设计案例研究助手 v2.0 — 深度论文拆解版
+CaseForge v2.1 — 10 字段深度拆解
 ==========================================
 用法:
   python main.py                    # 交互式菜单
@@ -186,7 +186,7 @@ def main():
 
     bar = "═" * 50
     print(f"\n╔{bar}╗")
-    print(f"║  城市设计案例研究助手 v2.0{' ' * 23}║")
+    print(f"║  CaseForge v2.1 — 10 字段深度拆解{' ' * 17}║")
     print(f"║  当前 API：{API_REGISTRY[ACTIVE_API]['label']:<38}║")
     print(f"╚{bar}╝")
 

@@ -21,8 +21,10 @@ def save_markdown(results: list, output_dir: str, prefix: str = "analysis") -> s
             f.write(f"**研究方法**\n\n{r.get('methods','未提取到')}\n\n")
             f.write(f"**实验/实证**\n\n{r.get('experiment','未提取到')}\n\n")
             f.write(f"**核心发现/成果**\n\n{r.get('findings','未提取到')}\n\n")
+            f.write(f"**图表解析**\n\n{r.get('figures','未提取到')}\n\n")
             f.write(f"**创新点**\n\n{r.get('innovation','未提取到')}\n\n")
             f.write(f"**优势与局限**\n\n{r.get('pros_cons','未提取到')}\n\n")
+            f.write(f"**可复刻性评估**\n\n{r.get('reproducibility','未提取到')}\n\n")
             f.write(f"**一句话总结**\n\n{r.get('summary','未提取到')}\n\n")
             f.write("---\n\n")
     return path
@@ -107,8 +109,10 @@ def save_docx(results: list, output_dir: str, prefix: str = "analysis") -> str:
             ("研究方法", "methods"),
             ("实验/实证", "experiment"),
             ("核心发现/成果", "findings"),
+            ("图表解析", "figures"),
             ("创新点", "innovation"),
             ("优势与局限", "pros_cons"),
+            ("可复刻性评估", "reproducibility"),
             ("一句话总结", "summary"),
         ]:
             h2 = doc.add_heading(section_name, level=2)
@@ -147,10 +151,14 @@ def save_html(results: list, output_dir: str, prefix: str = "analysis") -> str:
       <p>{r.get('experiment', '未提取到')}</p>
       <h3>📈 核心发现/成果</h3>
       <p>{r.get('findings', '未提取到')}</p>
+      <h3>📊 图表解析</h3>
+      <p>{r.get('figures', '未提取到')}</p>
       <h3>💡 创新点</h3>
       <p>{r.get('innovation', '未提取到')}</p>
       <h3>⚖️ 优势与局限</h3>
       <p>{r.get('pros_cons', '未提取到')}</p>
+      <h3>🔁 可复刻性评估</h3>
+      <p>{r.get('reproducibility', '未提取到')}</p>
       <h3>✨ 一句话总结</h3>
       <p class="summary">{r.get('summary', '未提取到')}</p>
     </article>""")
